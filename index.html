@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Forecast (Default: 65929 Frankfurt am Main)</title>
+  <!-- Google Fonts: Montserrat for headings, Lato for body -->
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      font-family: 'Lato', sans-serif;
+      background: linear-gradient(135deg, #83a4d4, #b6fbff);
+      color: #333;
+    }
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    header h1 {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3rem;
+      color: #1a237e;
+    }
+    /* Search Field */
+    .search-box {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .search-box input[type="text"] {
+      padding: 12px;
+      width: 320px;
+      border: 2px solid #90a4ae;
+      border-radius: 8px 0 0 8px;
+      outline: none;
+      font-size: 1.1rem;
+    }
+    .search-box button {
+      padding: 12px 24px;
+      border: 2px solid #1a237e;
+      border-left: none;
+      border-radius: 0 8px 8px 0;
+      background: #1a237e;
+      color: #ffffff;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .search-box button:hover {
+      background: #0d1447;
+    }
+    /* Section Titles */
+    section h2, section h3 {
+      font-family: 'Montserrat', sans-serif;
+      color: #1a237e;
+      border-bottom: 3px solid #1a237e;
+      padding-bottom: 8px;
+      margin-bottom: 20px;
+    }
+    /* Current Weather Section */
+    .weather-current {
+      padding: 20px;
+      border-radius: 10px;
+      background: #e3f2fd;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 30px;
+    }
+    .weather-current .details {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+    .weather-current .details div {
+      flex: 1;
+      min-width: 140px;
+      text-align: center;
+      margin: 10px 0;
+    }
+    .weather-current .details p {
+      margin: 8px 0;
+      font-size: 1.1rem;
+    }
+    /* Forecast Sections */
+    .forecast-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding-bottom: 10px;
+    }
+    .forecast-item {
+      background: #e3f2fd;
+      padding: 15px;
+      border-radius: 10px;
+      min-width: 120px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+    .forecast-item:hover {
+      transform: scale(1.05);
+    }
+    .forecast-item p {
+      margin: 8px 0;
+      font-size: 1rem;
+    }
+    .icon {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 5px;
+    }
+    /* Scrollbar styling for forecast containers */
+    .forecast-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .forecast-container::-webkit-scrollbar-track {
+      background: #cfd8dc;
+      border-radius: 10px;
+    }
+    .forecast-container::-webkit-scrollbar-thumb {
+      background: #90a4ae;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Weather Forecast</h1>
+    </header>
+
+    <!-- Search Field -->
+    <div class="search-box">
+      <input type="text" placeholder="Enter location" id="locationInput" />
+      <button id="searchButton">Search</button>
+    </div>
+
+    <!-- Current Weather Section -->
+    <section class="weather-current">
+      <h2>Current Weather</h2>
+      <div class="details" id="currentDetails">
+        <p>Loading forecast...</p>
+      </div>
+    </section>
+
+    <!-- Hourly Forecast Section -->
+    <section class="forecast">
+      <h3>Hourly Forecast (24 hours)</h3>
+      <div class="forecast-container" id="hourlyContainer">
+        <!-- Hourly forecast items will be inserted here -->
+      </div>
+    </section>
+
+    <!-- 7-Day Forecast Section -->
+    <section class="forecast">
+      <h3>7-Day Forecast</h3>
+      <div class="forecast-container" id="dailyContainer">
+        <!-- Daily forecast items will be inserted here -->
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Helper function: find the index in the time array that's closest to the target time
+    function findClosestTimeIndex(targetTime, timeArray) {
+      const targetDate = new Date(targetTime);
+      let closestIndex = 0;
+      let smallestDiff = Math.abs(new Date(timeArray[0]) - targetDate);
+      for (let i = 1; i < timeArray.length; i++) {
+        const diff = Math.abs(new Date(timeArray[i]) - targetDate);
+        if (diff < smallestDiff) {
+          smallestDiff = diff;
+          closestIndex = i;
+        }
+      }
+      return closestIndex;
+    }
+
+    // Function to map weather codes to emoji icons
+    function getWeatherIcon(weatherCode) {
+      if (weatherCode === 0) return '☀️';
+      else if ([1, 2, 3].includes(weatherCode)) return '🌤️';
+      else if ([45, 48].includes(weatherCode)) return '🌫️';
+      else if ([51, 53, 55].includes(weatherCode)) return '🌦️';
+      else if ([56, 57].includes(weatherCode)) return '🌧️';
+      else if ([61, 63, 65].includes(weatherCode)) return '🌧️';
+      else if ([66, 67].includes(weatherCode)) return '🌧️❄️';
+      else if ([71, 73, 75, 77].includes(weatherCode)) return '❄️';
+      else if ([80, 81, 82].includes(weatherCode)) return '🌦️';
+      else if ([85, 86].includes(weatherCode)) return '🌨️';
+      else if (weatherCode === 95) return '⛈️';
+      else if ([96, 99].includes(weatherCode)) return '⛈️';
+      else return '❓';
+    }
+
+    // Function to fetch weather data for a given location
+    function searchWeather(location) {
+      fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (!data.results || data.results.length === 0) {
+            alert('Location not found. Please try another search.');
+            return;
+          }
+          const { latitude, longitude } = data.results[0];
+          const forecastUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,apparent_temperature,precipitation,weathercode&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,weathercode&current_weather=true&timezone=auto`;
+          return fetch(forecastUrl);
+        })
+        .then(response => response && response.json())
+        .then(weatherData => {
+          if (!weatherData) return;
+          updateCurrentWeather(weatherData);
+          updateHourlyForecast(weatherData);
+          updateDailyForecast(weatherData);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error fetching weather data.');
+        });
+    }
+
+    // Update the Current Weather Section with improved apparent temperature accuracy
+    function updateCurrentWeather(weatherData) {
+      const current = weatherData.current_weather;
+      const currentIndex = findClosestTimeIndex(current.time, weatherData.hourly.time);
+      const apparent = weatherData.hourly.apparent_temperature[currentIndex];
+      const precipitation = weatherData.hourly.precipitation[currentIndex];
+      const weatherIcon = getWeatherIcon(current.weathercode);
+      const likelihood = weatherData.daily.precipitation_probability_max[0];
+      const html = `
+        <div>
+          <p class="icon">${weatherIcon}</p>
+          <p><strong>Temp:</strong> ${Math.round(current.temperature)}°C</p>
+        </div>
+        <div>
+          <p class="icon">${getWeatherIcon(weatherData.hourly.weathercode[currentIndex])}</p>
+          <p><strong>Real Feel:</strong> ${Math.round(apparent)}°C</p>
+        </div>
+        <div>
+          <p class="icon">💧</p>
+          <p><strong>Precip:</strong> ${Math.round(precipitation)} mm</p>
+        </div>
+        <div>
+          <p class="icon">🌧️</p>
+          <p><strong>Likelihood:</strong> ${likelihood !== undefined ? Math.round(likelihood) + '%' : 'N/A'}</p>
+        </div>
+      `;
+      document.getElementById('currentDetails').innerHTML = html;
+    }
+
+    // Update the Hourly Forecast Section (next 24 hours)
+    function updateHourlyForecast(weatherData) {
+      const hourlyContainer = document.getElementById('hourlyContainer');
+      hourlyContainer.innerHTML = '';
+      const currentIndex = findClosestTimeIndex(weatherData.current_weather.time, weatherData.hourly.time);
+      for (let i = currentIndex; i < currentIndex + 24 && i < weatherData.hourly.time.length; i++) {
+        const time = new Date(weatherData.hourly.time[i]);
+        const hours = time.getHours().toString().padStart(2, '0');
+        const minutes = time.getMinutes().toString().padStart(2, '0');
+        const timeString = `${hours}:${minutes}`;
+        const temp = weatherData.hourly.temperature_2m[i];
+        const apparent = weatherData.hourly.apparent_temperature[i];
+        const precip = weatherData.hourly.precipitation[i];
+        const icon = getWeatherIcon(weatherData.hourly.weathercode[i]);
+        const item = document.createElement('div');
+        item.className = 'forecast-item';
+        item.innerHTML = `<p class="icon">${icon}</p>
+                          <p>${timeString}</p>
+                          <p>${Math.round(temp)}°C</p>
+                          <p>Real: ${Math.round(apparent)}°C</p>
+                          <p>💧 ${Math.round(precip)} mm</p>`;
+        hourlyContainer.appendChild(item);
+      }
+    }
+
+    // Update the 7-Day Forecast Section
+    function updateDailyForecast(weatherData) {
+      const dailyContainer = document.getElementById('dailyContainer');
+      dailyContainer.innerHTML = '';
+      const numDays = Math.min(weatherData.daily.time.length, 7);
+      for (let i = 0; i < numDays; i++) {
+        const date = new Date(weatherData.daily.time[i]);
+        const options = { weekday: 'short' };
+        const dayName = date.toLocaleDateString(undefined, options);
+        const maxTemp = weatherData.daily.temperature_2m_max[i];
+        const minTemp = weatherData.daily.temperature_2m_min[i];
+        const precipProb = weatherData.daily.precipitation_probability_max[i];
+        const icon = getWeatherIcon(weatherData.daily.weathercode[i]);
+        const item = document.createElement('div');
+        item.className = 'forecast-item';
+        item.innerHTML = `<p class="icon">${icon}</p>
+                          <p>${dayName}</p>
+                          <p>Max: ${Math.round(maxTemp)}°C</p>
+                          <p>Min: ${Math.round(minTemp)}°C</p>
+                          <p>Precip: ${precipProb !== undefined ? Math.round(precipProb) + '%' : 'N/A'}</p>`;
+        dailyContainer.appendChild(item);
+      }
+    }
+
+    document.getElementById('searchButton').addEventListener('click', function() {
+      const location = document.getElementById('locationInput').value.trim();
+      if (!location) {
+        alert('Please enter a location.');
+        return;
+      }
+      searchWeather(location);
+    });
+
+    // On page load, default to "65929 Frankfurt am Main"
+    document.addEventListener('DOMContentLoaded', function() {
+      const defaultLocation = "65929 Frankfurt am Main";
+      document.getElementById('locationInput').value = defaultLocation;
+      searchWeather(defaultLocation);
+    });
+  </script>
+</body>
+</html>
