@@ -6,394 +6,214 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.5; /* Slightly reduced line height */
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
     background-color: #f4f7f9;
     color: #333;
-    padding: 10px; /* Reduced body padding */
+    padding: 10px;
 }
 
+/* App Container */
 .app-container {
     max-width: 1000px;
-    margin: 0 auto;
+    margin: 20px auto;
     background-color: #fff;
-    padding: 15px; /* Reduced container padding */
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* Softer shadow */
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Header with gradient background */
 .app-header {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    padding: 20px;
     text-align: center;
-    margin-bottom: 20px; /* Reduced margin */
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px; /* Reduced padding */
+    color: #fff;
 }
-
 .app-header h1 {
-    color: #2a6ea5;
-    margin-bottom: 12px; /* Reduced margin */
-    font-size: 1.6rem; /* Slightly smaller H1 */
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 10px;
 }
 
+/* Search Container */
 .search-container {
     display: flex;
     justify-content: center;
-    gap: 8px; /* Reduced gap */
-    margin-bottom: 10px; /* Reduced margin */
-    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px auto;
+    max-width: 600px;
 }
-
 #search-input {
-    padding: 8px 12px; /* Reduced padding */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 0.95rem; /* Slightly smaller font */
-    flex-grow: 1;
-    max-width: 350px; /* Slightly reduced max width */
-}
-
-#search-button {
-    padding: 8px 15px; /* Reduced padding */
-    background-color: #2a6ea5;
-    color: white;
+    flex: 1;
+    padding: 10px;
     border: none;
-    border-radius: 4px;
-    font-size: 0.95rem; /* Slightly smaller font */
+    border-radius: 5px;
+    font-size: 1rem;
+}
+#search-button {
+    padding: 10px 20px;
+    background-color: #fff;
+    color: #4facfe;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease;
 }
-
 #search-button:hover {
-    background-color: #215683;
+    background-color: #e0f7ff;
+    transform: translateY(-2px);
 }
 
-.history-container {
-    margin-top: 8px; /* Reduced margin */
-    font-size: 0.85rem; /* Smaller font */
-    color: #555;
-}
-
-#history-select {
-    padding: 4px 6px; /* Reduced padding */
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin-left: 5px;
-    max-width: 220px; /* Reduced max width */
-    font-size: 0.85rem; /* Smaller font */
-}
-
-.weather-content {
-    /* Styles for the main content area */
-}
-
-.status-message {
-    text-align: center;
-    padding: 10px; /* Reduced padding */
-    margin-bottom: 15px; /* Reduced margin */
-    border-radius: 4px;
-    font-size: 0.9rem; /* Slightly smaller font */
-    display: none;
-}
-
-.status-message.loading {
-    background-color: #e0f0ff;
-    color: #2a6ea5;
-    display: block;
-}
-
-.status-message.error {
-    background-color: #ffe0e0;
-    color: #c00;
-    display: block;
-}
-
-.weather-section {
-    margin-bottom: 20px; /* Reduced margin */
-    padding: 15px; /* Reduced padding */
-    background-color: #fdfdfd;
-    border: 1px solid #eee;
-    border-radius: 6px;
-}
-
-.weather-section h2 {
-    color: #2a6ea5;
-    margin-bottom: 10px; /* Reduced margin */
+/* Suggestions */
+.suggestion-item {
+    background-color: #fff;
+    color: #333;
+    padding: 8px;
+    cursor: pointer;
     border-bottom: 1px solid #eee;
-    padding-bottom: 8px; /* Reduced padding */
-    font-size: 1.25rem; /* Smaller section headings */
+}
+}
+.suggestion-item:hover {
+    background-color: #f0f0f0;
 }
 
-/* Current Weather Specifics */
+/* History */
+.history-container {
+    text-align: center;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+#history-select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+/* Weather Sections (cards) */
+.weather-section {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.weather-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.weather-section h2 {
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #4facfe;
+    border-bottom: 2px solid #e0f7ff;
+    padding-bottom: 5px;
+}
+
+/* Current Weather */
 .current-weather .weather-data {
     text-align: center;
 }
-
 #current-location {
-    font-size: 1.5rem; /* Reduced font size */
-    font-weight: bold;
-    margin-bottom: 8px; /* Reduced margin */
-    color: #333;
-    word-wrap: break-word; /* Prevent long names from overflowing */
+    font-size: 1.8rem;
+    margin-bottom: 10px;
 }
-
 .current-main {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 10px; /* Reduced gap */
-    margin-bottom: 8px; /* Reduced margin */
-}
-
-.weather-icon {
-    font-size: 1.8rem; /* Slightly smaller base icon size */
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
 }
 .weather-icon.large {
-    font-size: 3rem; /* Reduced size */
+    font-size: 3rem;
 }
-
 .temperature {
-    font-size: 2.5rem; /* Reduced size */
+    font-size: 2.5rem;
     font-weight: bold;
-    color: #111;
+    color: #333;
 }
-
-#current-realfeel {
-    font-size: 1rem; /* Reduced size */
+#current-realfeel, #current-conditions {
+    font-size: 1.1rem;
     color: #555;
-    margin-bottom: 4px; /* Reduced margin */
 }
 
-#current-conditions {
-    font-size: 1rem; /* Reduced size */
-    color: #555;
-    text-transform: capitalize;
-}
-
-/* Shared Scrollable Container Style */
+/* Scrollable containers for hourly/daily forecasts */
 .scrollable-container {
     overflow-x: auto;
     white-space: nowrap;
-    padding-bottom: 10px; /* Reduced padding for scrollbar */
-    border: 1px solid #eee;
-    border-radius: 4px;
-    background-color: #f9f9f9;
-    padding-left: 4px; /* Reduced internal padding */
-    padding-right: 4px;
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    padding: 10px;
 }
-
-/* Base Item Style for Hourly/Daily */
 .hourly-item, .daily-item {
     display: inline-block;
-    vertical-align: top;
-    border-right: 1px solid #eee;
-    padding: 10px 8px; /* Reduced padding */
+    background-color: #fdfdfd;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 5px;
     text-align: center;
-    background-color: #fff;
-    margin: 4px 0; /* Reduced vertical margin */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    min-width: 100px;
 }
-.hourly-item:last-child, .daily-item:last-child {
-    border-right: none;
+.hourly-time, .daily-date {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
 }
-
-/* Hourly Forecast Specifics */
-.hourly-item {
-    min-width: 85px; /* Reduced min-width */
+.hourly-icon, .daily-icon {
+    font-size: 2rem;
+    margin-bottom: 5px;
 }
-
-.hourly-time {
+.hourly-temp, .daily-temp {
+    font-size: 1.2rem;
     font-weight: bold;
-    font-size: 0.85rem; /* Reduced font size */
-    margin-bottom: 4px;
 }
-
-.hourly-icon {
-    font-size: 1.6rem; /* Reduced icon size */
-    margin: 4px 0;
-}
-
-.hourly-temp {
-    font-weight: bold;
-    font-size: 1rem; /* Slightly reduced */
-    margin-bottom: 2px;
-}
-
-.hourly-precip, .hourly-realfeel {
-    font-size: 0.75rem; /* Reduced font size */
+.hourly-realfeel, .hourly-precip, .daily-precip {
+    font-size: 0.9rem;
     color: #666;
-    line-height: 1.3; /* Ensure lines aren't too spaced */
 }
 
-/* Daily Forecast Specifics */
-.daily-item {
-    min-width: 95px; /* Reduced min-width */
-}
-
-.daily-date {
-    font-weight: bold;
-    margin-bottom: 4px;
-    font-size: 0.85rem; /* Reduced font size */
-}
-
-.daily-icon {
-    font-size: 2rem; /* Reduced icon size */
-    margin: 6px 0;
-}
-
-.daily-temp {
-    font-weight: bold;
-    font-size: 0.95rem; /* Slightly reduced */
-    margin-bottom: 2px;
-}
-.daily-temp .min {
-    color: #555;
-}
-
-.daily-precip {
-    font-size: 0.8rem; /* Reduced font size */
-    color: #666;
-     line-height: 1.3;
-}
-
-/* Daily Trend Chart */
+/* Daily Trend Chart Container */
 .daily-trend-chart-container {
     position: relative;
     width: 100%;
-    aspect-ratio: 2 / 1; /* Responsive aspect ratio (width / height) */
-    /* Removed fixed height */
-    margin-top: 15px; /* Reduced space above chart */
-    max-height: 220px; /* Added max-height for larger screens */
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* Status Messages */
+.status-message {
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+.status-message.loading {
+    background-color: #e0f7ff;
+    color: #0077b6;
+}
+.status-message.error {
+    background-color: #ffe0e0;
+    color: #c00;
 }
 
 /* Footer */
 footer {
     text-align: center;
-    margin-top: 20px; /* Reduced margin */
-    font-size: 0.75rem; /* Smaller font */
-    color: #aaa;
-    padding-top: 10px; /* Add some space above footer */
-    border-top: 1px solid #eee; /* Separator line */
-}
-
-footer a {
-    color: #2a6ea5;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
+    padding: 15px;
+    background-color: #f0f0f0;
+    font-size: 0.9rem;
+    color: #555;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    body {
-        padding: 5px; /* Further reduce padding */
-    }
-    .app-container {
-        padding: 10px; /* Further reduce padding */
-    }
-    .weather-section h2 {
-        font-size: 1.15rem; /* Smaller headings */
-    }
-    #current-location {
-        font-size: 1.3rem;
-    }
-    .temperature {
-        font-size: 2.2rem;
-    }
-    .weather-icon.large {
-        font-size: 2.8rem;
-    }
-    .daily-item {
-        min-width: 90px;
-    }
-    .hourly-item {
-        min-width: 80px;
-    }
-     .daily-trend-chart-container {
-         max-height: 200px; /* Adjust max height */
-     }
-}
-
-@media (max-width: 480px) {
-     .app-header h1 {
-        font-size: 1.4rem; /* Smaller H1 on mobile */
-     }
     .search-container {
         flex-direction: column;
-        align-items: stretch;
     }
-     #search-input {
-        max-width: none;
-        font-size: 0.9rem; /* Ensure readable on mobile */
-     }
-     #search-button {
-         font-size: 0.9rem;
-     }
-    .weather-section {
-        padding: 10px; /* Further reduce padding */
-        margin-bottom: 15px; /* Further reduce margin */
-    }
-    #current-location {
-        font-size: 1.2rem; /* Smaller location name */
-    }
-    .temperature {
-        font-size: 1.9rem; /* Smaller temp */
-    }
-    .weather-icon.large {
-        font-size: 2.2rem; /* Smaller icon */
-    }
-    #current-realfeel, #current-conditions {
-        font-size: 0.9rem; /* Smaller details */
-    }
-     .hourly-item {
-        min-width: 75px; /* More compact */
-        padding: 8px 5px; /* Adjust padding */
-     }
-     .daily-item {
-        min-width: 85px; /* More compact */
-        padding: 8px 5px; /* Adjust padding */
-     }
-     .hourly-icon {
-         font-size: 1.4rem;
-     }
-      .daily-icon {
-         font-size: 1.8rem;
-     }
-     .hourly-time, .daily-date {
-         font-size: 0.8rem;
-     }
-     .hourly-temp, .daily-temp {
-         font-size: 0.9rem;
-     }
-      .hourly-precip, .hourly-realfeel, .daily-precip {
-         font-size: 0.7rem; /* Very small details */
-     }
-     .daily-trend-chart-container {
-         aspect-ratio: 1.8 / 1; /* Slightly taller aspect ratio on mobile */
-         max-height: 180px; /* Adjust max height */
-     }
-     footer {
-         font-size: 0.7rem;
-     }
-}
-
-/* Optional: Fine-tune for very small screens */
-@media (max-width: 360px) {
-    .temperature {
-        font-size: 1.7rem;
-    }
-    .weather-icon.large {
-        font-size: 2rem;
-    }
-    .hourly-item {
-        min-width: 70px;
-    }
-    .daily-item {
-        min-width: 80px;
-    }
-    /* Reduce chart label font size further on smallest screens */
-    .chartjs-plugin-datalabels {
-         font-size: 9px !important;
+    #search-input {
+        width: 100%;
     }
 }
