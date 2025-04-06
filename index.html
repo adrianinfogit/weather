@@ -4,32 +4,121 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Weather Forecast</title>
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <!-- Chart.js and Datalabels -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --font-family: 'Roboto', sans-serif;
+      --font-color: #333;
+    }
+    body {
+      font-family: var(--font-family);
+      color: var(--font-color);
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .app-header {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--primary-color);
+      color: white;
+    }
+    .search-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    #search-input {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+      outline: none;
+      flex: 1;
+      max-width: 400px;
+    }
+    #search-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      background-color: var(--secondary-color);
+      color: white;
+      cursor: pointer;
+      border-radius: 0 4px 4px 0;
+      outline: none;
+    }
+    #search-button:hover {
+      background-color: #27ae60;
+    }
+    .weather-content {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-gap: 20px;
+      margin-top: 20px;
+    }
+    .weather-section {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .weather-data {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .temperature {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background-color: var(--primary-color);
+      color: white;
+      margin-top: 20px;
+    }
+    @media (min-width: 768px) {
+      .weather-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (min-width: 1024px) {
+      .weather-content {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="app-container">
     <header class="app-header">
       <h1>Weather Forecast</h1>
       <div class="search-container">
-        <input type="text" id="search-input" placeholder="Enter city or zip code..." autocomplete="off">
-        <button id="search-button">Search</button>
+        <input type="text" id="search-input" placeholder="Enter city or zip code..." autocomplete="off" aria-label="Search for city or zip code">
+        <button id="search-button" aria-label="Search">Search</button>
       </div>
       <div id="suggestions"></div>
       <div class="history-container">
         <label for="history-select">Recent Locations:</label>
-        <select id="history-select">
+        <select id="history-select" aria-label="Select a recent location">
           <option value="">Select a location</option>
         </select>
       </div>
     </header>
     <main class="weather-content">
       <div id="status-message" class="status-message" aria-live="polite"></div>
-  
       <section id="current-weather" class="weather-section current-weather">
         <h2>Current Weather</h2>
         <div class="weather-data">
@@ -42,21 +131,18 @@
           <div id="current-conditions">--</div>
         </div>
       </section>
-  
       <section id="hourly-forecast" class="weather-section hourly-forecast">
         <h2>Hourly Forecast (48 hours)</h2>
         <div id="hourly-container" class="scrollable-container">
           <!-- Hourly items will be added here -->
         </div>
       </section>
-  
       <section id="daily-forecast" class="weather-section daily-forecast">
         <h2>Daily Forecast (15 days)</h2>
         <div id="daily-container" class="scrollable-container">
           <!-- Daily items will be added here -->
         </div>
       </section>
-  
       <section id="daily-trend-section" class="weather-section daily-trend-section">
         <h2>15-Day Temperature Trend</h2>
         <div id="daily-trend" class="daily-trend-chart-container">
@@ -64,14 +150,12 @@
         </div>
       </section>
     </main>
-  
     <footer>
       Weather data powered by <a href="https://www.visualcrossing.com/" target="_blank" rel="noopener noreferrer">Visual Crossing</a>.
       Geocoding by <a href="https://www.mapbox.com/" target="_blank" rel="noopener noreferrer">Mapbox</a>.
       IP Location by <a href="https://ip-api.com/" target="_blank" rel="noopener noreferrer">ip-api.com</a>.
     </footer>
   </div>
-  
   <script>
     const MAPBOX_TOKEN = 'your_mapbox_access_token_here';
   </script>
