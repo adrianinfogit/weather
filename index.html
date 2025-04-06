@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <!-- Add Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Add Chart.js Datalabels Plugin CDN (AFTER Chart.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 </head>
 <body>
     <div class="app-container">
@@ -33,7 +35,7 @@
                 <div class="weather-data">
                     <div id="current-location">Loading location...</div>
                     <div class="current-main">
-                        <div id="current-icon" class="weather-icon large"></div>
+                        <div id="current-icon" class="weather-icon large" role="img" aria-label="Weather icon"></div>
                         <div id="current-temp" class="temperature">--°C</div>
                     </div>
                     <div id="current-realfeel">Feels like: --°C</div>
@@ -50,16 +52,13 @@
 
             <section id="daily-forecast" class="weather-section daily-forecast" aria-labelledby="daily-heading">
                 <h2 id="daily-heading">Daily Forecast (15 days)</h2>
-                <!-- Added scrollable-container class -->
                 <div id="daily-container" class="scrollable-container">
                     <!-- Daily items will be added here -->
                 </div>
             </section>
 
-            <!-- Renamed section for clarity -->
             <section id="daily-trend-section" class="weather-section daily-trend-section" aria-labelledby="trend-heading">
                  <h2 id="trend-heading">15-Day Temperature Trend</h2>
-                 <!-- Replaced placeholder with canvas container -->
                  <div id="daily-trend" class="daily-trend-chart-container">
                      <canvas id="daily-trend-chart"></canvas>
                  </div>
